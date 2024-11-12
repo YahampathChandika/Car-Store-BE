@@ -1,0 +1,876 @@
+openapi: 3.0.0
+info:
+  title: Car Store Management API
+  description: "API for managing car details and brands, including adding, updating, sorting, and pagination."
+  version: 1.0.0
+servers:
+- url: https://virtserver.swaggerhub.com/BAWANTHAPASQUAL_1/carStore/1.0.0
+  description: SwaggerHub API Auto Mocking
+- url: http://localhost:4002
+  description: Local development server
+tags:
+- name: Cars
+  description: Car management operations
+- name: Brands
+  description: Brand management operations
+- name: Users
+  description: User management operations
+- name: Inquiries
+  description: Inquiry management operations
+paths:
+  /cars:
+    get:
+      tags:
+      - Cars
+      summary: Get all cars
+      description: Retrieve all car details.
+      responses:
+        "200":
+          description: List of cars returned
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/inline_response_200'
+    post:
+      tags:
+      - Cars
+      summary: Add a new car
+      description: "Add a new car, only accessible to authenticated users."
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/cars_body'
+        required: true
+      responses:
+        "200":
+          description: Car successfully added
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_1'
+  /cars/latest:
+    get:
+      tags:
+      - Cars
+      summary: Get the latest six cars
+      description: Retrieve the last six added cars.
+      responses:
+        "200":
+          description: List of latest cars returned
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/inline_response_200'
+  /cars/pagination:
+    get:
+      tags:
+      - Cars
+      summary: Get cars with pagination
+      description: Get a paginated list of cars.
+      parameters:
+      - name: page
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          example: 1
+      responses:
+        "200":
+          description: List of paginated cars
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/inline_response_200'
+  /cars/{id}:
+    get:
+      tags:
+      - Cars
+      summary: Get car by ID
+      description: Retrieve a car by its ID.
+      parameters:
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          example: 1
+      responses:
+        "200":
+          description: Car details returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200'
+    delete:
+      tags:
+      - Cars
+      summary: Delete a car
+      description: "Delete a car by its ID, only accessible to authenticated users."
+      parameters:
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          example: 1
+      responses:
+        "200":
+          description: Car successfully deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_2'
+    patch:
+      tags:
+      - Cars
+      summary: Update a car
+      description: "Update car details by its ID, only accessible to authenticated users."
+      parameters:
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          example: 1
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/cars_id_body'
+        required: true
+      responses:
+        "200":
+          description: Car successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_3'
+  /cars/sortBrand/{id}:
+    get:
+      tags:
+      - Cars
+      summary: Sort cars by brand
+      description: Retrieve a list of cars sorted by a specific brand.
+      parameters:
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          example: 1
+      responses:
+        "200":
+          description: Sorted list of cars returned
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/inline_response_200'
+  /cars/paginationBrand/{id}:
+    get:
+      tags:
+      - Cars
+      summary: Get paginated cars by brand
+      description: Retrieve a paginated list of cars for a specific brand.
+      parameters:
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          example: 1
+      - name: page
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          example: 1
+      responses:
+        "200":
+          description: Paginated list of cars returned
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/inline_response_200'
+  /brand:
+    get:
+      tags:
+      - Brands
+      summary: Retrieve all brands
+      description: Get a list of all car brands.
+      responses:
+        "200":
+          description: Successfully retrieved the list of brands.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/inline_response_200_4'
+    post:
+      tags:
+      - Brands
+      summary: Create a new brand
+      description: Adds a new brand to the system.
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/brand_body'
+        required: true
+      responses:
+        "200":
+          description: Brand created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_5'
+  /brand/{id}:
+    get:
+      tags:
+      - Brands
+      summary: Retrieve a brand by ID
+      description: Get details of a brand using its unique identifier.
+      parameters:
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          example: 1
+      responses:
+        "200":
+          description: Successfully retrieved the brand details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_4'
+    delete:
+      tags:
+      - Brands
+      summary: Delete a brand by ID
+      description: Removes a brand from the system using its unique identifier.
+      parameters:
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          example: 1
+      responses:
+        "200":
+          description: Brand deleted successfully.
+    patch:
+      tags:
+      - Brands
+      summary: Update a brand by ID
+      description: Update a brand's details using its unique identifier.
+      parameters:
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          example: 1
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/brand_id_body'
+        required: true
+      responses:
+        "200":
+          description: Brand updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_4'
+  /users/login:
+    post:
+      tags:
+      - Users
+      summary: Log in a user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/users_login_body'
+        required: true
+      responses:
+        "200":
+          description: User successfully logged in
+        "401":
+          description: Unauthorized
+        "500":
+          description: Internal Server Error
+  /users/register:
+    post:
+      tags:
+      - Users
+      summary: Register a new user
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/users_register_body'
+        required: true
+      responses:
+        "201":
+          description: User successfully created
+        "409":
+          description: Username or email already exists
+        "500":
+          description: Internal Server Error
+  /users/roles:
+    get:
+      tags:
+      - Users
+      summary: Retrieve user roles
+      responses:
+        "200":
+          description: List of user roles
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/inline_response_200_6'
+        "404":
+          description: No user roles available
+        "500":
+          description: Internal Server Error
+  /users:
+    get:
+      tags:
+      - Users
+      summary: Get all users
+      responses:
+        "200":
+          description: List of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        "404":
+          description: No user data available
+        "500":
+          description: Internal Server Error
+  /users/{id}:
+    get:
+      tags:
+      - Users
+      summary: Get a user by ID
+      parameters:
+      - name: id
+        in: path
+        description: ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          example: 1
+      responses:
+        "200":
+          description: User details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        "404":
+          description: User not found
+        "500":
+          description: Internal Server Error
+    delete:
+      tags:
+      - Users
+      summary: Delete a user by ID
+      parameters:
+      - name: id
+        in: path
+        description: ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          example: 1
+      responses:
+        "200":
+          description: User successfully deleted
+        "404":
+          description: User not found
+        "500":
+          description: Internal Server Error
+    patch:
+      tags:
+      - Users
+      summary: Update a user by ID
+      parameters:
+      - name: id
+        in: path
+        description: ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          example: 1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/users_id_body'
+        required: true
+      responses:
+        "200":
+          description: User successfully updated
+        "404":
+          description: User not found
+        "500":
+          description: Internal Server Error
+  /inquiry/addInquiry:
+    post:
+      tags:
+      - Inquiries
+      summary: Add a new inquiry
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/inquiry_addInquiry_body'
+        required: true
+      responses:
+        "200":
+          description: Inquiry successfully created
+  /inquiry:
+    get:
+      tags:
+      - Inquiries
+      summary: Get all inquiries
+      responses:
+        "200":
+          description: List of inquiries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Inquiry'
+  /inquiry/{id}/response:
+    patch:
+      tags:
+      - Inquiries
+      summary: Mark inquiry as responded
+      parameters:
+      - name: id
+        in: path
+        description: ID of the inquiry
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          example: 1
+      responses:
+        "200":
+          description: Inquiry marked as responded
+  /inquiry/recentInquiries:
+    get:
+      tags:
+      - Inquiries
+      summary: Get the last 20 inquiries
+      responses:
+        "200":
+          description: List of recent inquiries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Inquiry'
+        "404":
+          description: No inquiries available
+        "500":
+          description: Internal Server Error
+  /inquiry/{id}:
+    get:
+      tags:
+      - Inquiries
+      summary: Get an inquiry by ID
+      parameters:
+      - name: id
+        in: path
+        description: ID of the inquiry
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          example: 1
+      responses:
+        "200":
+          description: Inquiry details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Inquiry'
+components:
+  schemas:
+    Inquiry:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: John Doe
+        location:
+          type: string
+          example: New York
+        email:
+          type: string
+          example: johndoe@example.com
+        contactNo:
+          type: string
+          example: "123456789"
+        message:
+          type: string
+          example: I would like more details about car availability.
+        responded:
+          type: boolean
+          example: false
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        firstName:
+          type: string
+          example: John
+        lastName:
+          type: string
+          example: Doe
+        email:
+          type: string
+          example: johndoe@example.com
+        contactNo:
+          type: string
+          example: "123456789"
+        gender:
+          type: string
+          example: Male
+        address:
+          type: string
+          example: "123 Street, City"
+        username:
+          type: string
+          example: johndoe
+        image:
+          type: string
+          format: binary
+        role:
+          $ref: '#/components/schemas/User_role'
+    inline_response_200:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        carName:
+          type: string
+          example: Toyota Prius
+        price:
+          type: number
+          example: 30000
+    cars_body:
+      type: object
+      properties:
+        carName:
+          type: string
+          example: Toyota Prius
+        manufacturingYear:
+          type: number
+          example: 2020
+        exteriorColour:
+          type: string
+          example: Blue
+        interiorColour:
+          type: string
+          example: Black
+        driverPosition:
+          type: string
+          example: Left
+        engine:
+          type: string
+          example: V6
+        bodyType:
+          type: string
+          example: SUV
+        transmission:
+          type: string
+          example: Automatic
+        fuelType:
+          type: string
+          example: Hybrid
+        price:
+          type: number
+          example: 30000
+        CarPhotos:
+          type: array
+          items:
+            type: string
+            format: binary
+    inline_response_200_1:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: Car successfully created!
+    inline_response_200_2:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: Car successfully deleted!
+    cars_id_body:
+      type: object
+      properties:
+        carName:
+          type: string
+          example: Toyota Prius
+        manufacturingYear:
+          type: number
+          example: 2020
+        exteriorColour:
+          type: string
+          example: Blue
+        interiorColour:
+          type: string
+          example: Black
+        driverPosition:
+          type: string
+          example: Left
+        engine:
+          type: string
+          example: V6
+        bodyType:
+          type: string
+          example: SUV
+        transmission:
+          type: string
+          example: Automatic
+        fuelType:
+          type: string
+          example: Hybrid
+        price:
+          type: number
+          example: 30000
+        CarPhotos:
+          type: array
+          items:
+            type: string
+            format: binary
+    inline_response_200_3:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: Car successfully updated!
+    inline_response_200_4:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The brand's unique identifier.
+          example: 1
+        brandName:
+          type: string
+          description: The name of the brand.
+          example: Toyota
+        brandImage:
+          type: string
+          description: URL of the brand's image.
+          example: http://example.com/toyota-logo.png
+    brand_body:
+      type: object
+      properties:
+        brandName:
+          type: string
+          description: The name of the brand.
+          example: Toyota
+        brandImage:
+          type: string
+          description: The image file for the brand's logo.
+          format: binary
+    inline_response_200_5:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The brand's unique identifier.
+          example: 1
+        brandName:
+          type: string
+          description: The name of the brand.
+          example: Toyota
+        brandImage:
+          type: string
+          description: URL of the brand's logo.
+          example: http://example.com/toyota-logo.png
+    brand_id_body:
+      type: object
+      properties:
+        brandName:
+          type: string
+          description: The name of the brand.
+          example: Toyota
+        brandImage:
+          type: string
+          description: The image file for the brand's logo.
+          format: binary
+    users_login_body:
+      type: object
+      properties:
+        username:
+          type: string
+          example: johndoe
+        password:
+          type: string
+          example: password123
+    users_register_body:
+      type: object
+      properties:
+        firstName:
+          type: string
+          example: John
+        lastName:
+          type: string
+          example: Doe
+        email:
+          type: string
+          example: johndoe@example.com
+        contactNo:
+          type: string
+          example: "123456789"
+        gender:
+          type: string
+          example: Male
+        address:
+          type: string
+          example: "123 Street, City"
+        username:
+          type: string
+          example: johndoe
+        password:
+          type: string
+          example: password123
+        image:
+          type: string
+          format: binary
+    inline_response_200_6:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        role:
+          type: string
+          example: Admin
+    users_id_body:
+      type: object
+      properties:
+        firstName:
+          type: string
+          example: John
+        lastName:
+          type: string
+          example: Doe
+        email:
+          type: string
+          example: johndoe@example.com
+        contactNo:
+          type: string
+          example: "123456789"
+        gender:
+          type: string
+          example: Male
+        address:
+          type: string
+          example: "123 Street, City"
+        username:
+          type: string
+          example: johndoe
+    inquiry_addInquiry_body:
+      type: object
+      properties:
+        name:
+          type: string
+          example: John Doe
+        location:
+          type: string
+          example: New York
+        email:
+          type: string
+          example: johndoe@example.com
+        contactNo:
+          type: string
+          example: "123456789"
+        message:
+          type: string
+          example: I would like more details about car availability.
+    User_role:
+      type: object
+      properties:
+        role:
+          type: string
+          example: Admin
